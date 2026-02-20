@@ -24,7 +24,17 @@
             touch-action: none;
         }
 
-        /* --- MASSIVE NOTHING STYLE INTRO --- */
+        /* --- Nothing Dot Font Effect --- */
+        .nothing-font {
+            text-transform: uppercase;
+            background-image: radial-gradient(#fff 35%, transparent 35%);
+            background-size: 4px 4px;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 1px rgba(255,255,255,0.5));
+        }
+
+        /* --- Intro --- */
         #intro {
             position: fixed;
             inset: 0;
@@ -34,45 +44,17 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: opacity 0.4s ease;
+            transition: opacity 0.5s ease;
         }
 
         #intro h1 {
-            font-size: 120px; /* MUCH BIGGER */
+            font-size: 80px;
             font-weight: 900;
-            letter-spacing: -6px;
+            letter-spacing: -4px;
             margin: 0;
-            line-height: 0.9;
-            text-align: center;
-            text-transform: uppercase;
-            /* Dot-matrix texture overlay */
-            background-image: radial-gradient(#fff 25%, transparent 25%);
-            background-size: 4px 4px;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 2px #fff);
         }
 
-        #intro p {
-            font-weight: 100;
-            letter-spacing: 15px; 
-            font-size: 24px;
-            color: #fff;
-            margin-top: 20px;
-            opacity: 0.8;
-        }
-
-        .inspired-tag {
-            position: absolute;
-            bottom: 30px;
-            right: 30px;
-            font-size: 12px;
-            letter-spacing: 3px;
-            color: #555;
-            text-transform: uppercase;
-        }
-
-        /* --- Main App Container --- */
+        /* --- Main App --- */
         #app-wrapper {
             width: 100%;
             max-width: 450px;
@@ -88,24 +70,54 @@
             -webkit-backdrop-filter: blur(40px);
             border: 1px solid var(--glass-border);
             border-radius: 40px;
-            padding: 40px;
+            padding: 35px;
             box-shadow: 0 50px 100px rgba(0,0,0,0.9);
             display: flex;
             flex-direction: column;
-            gap: 25px;
+            gap: 20px;
             position: relative;
         }
 
         .header h1 { 
-            font-size: 40px; 
+            font-size: 42px; 
             font-weight: 900; 
             letter-spacing: -2px; 
             margin: 0; 
             text-align: center; 
+        }
+
+        /* --- Slider Styling --- */
+        .density-control {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .density-control label {
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #888;
             text-transform: uppercase;
         }
 
-        /* --- Preview & Moon --- */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: rgba(255,255,255,0.1);
+            height: 4px;
+            border-radius: 2px;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 18px;
+            width: 18px;
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+        }
+
+        /* --- Preview Area --- */
         .preview-wrapper {
             position: relative;
             width: 100%;
@@ -119,18 +131,17 @@
             border-radius: 50%;
             border: 1px solid rgba(255,255,255,0.15);
             overflow: hidden;
-            box-shadow: 0 0 30px rgba(0,0,0,1);
         }
 
         #main-canvas { width: 100%; height: 100%; cursor: move; }
 
         #moon-toggle {
             position: absolute;
-            bottom: -20px;
+            bottom: -15px;
             left: 50%;
             transform: translateX(-50%);
-            width: 60px;
-            height: 60px;
+            width: 54px;
+            height: 54px;
             background: rgba(255,255,255,0.1);
             backdrop-filter: blur(10px);
             border: 1px solid var(--glass-border);
@@ -139,39 +150,43 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 10;
         }
 
-        #moon-toggle:hover { background: rgba(255,255,255,0.2); transform: translateX(-50%) scale(1.1); }
-
         .moon-shape {
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
             background: #fff;
-            transition: all 0.5s ease;
-            box-shadow: inset 9px 0px 0px 0px #000;
+            transition: 0.4s;
+            box-shadow: inset 8px 0px 0px 0px #000;
         }
 
         .full-moon .moon-shape {
             box-shadow: inset 0px 0px 0px 0px #000;
-            filter: drop-shadow(0 0 15px #fff);
+            filter: drop-shadow(0 0 10px #fff);
         }
 
-        /* --- Controls --- */
-        .controls { display: flex; flex-direction: column; gap: 12px; }
+        /* --- Footer Branding --- */
+        .inspired-footer {
+            text-align: center;
+            font-size: 12px;
+            color: #555;
+            margin-top: 10px;
+        }
+        
+        .nothing-brand {
+            color: #fff;
+            font-weight: 900;
+            font-size: 14px;
+        }
 
         .btn {
-            background: #fff; color: #000; border: none; padding: 20px;
-            border-radius: 20px; font-weight: 900; font-size: 16px;
-            text-transform: uppercase; cursor: pointer; transition: 0.2s; 
-            text-align: center; letter-spacing: 1px;
+            background: #fff; color: #000; border: none; padding: 18px;
+            border-radius: 18px; font-weight: 900; font-size: 14px;
+            text-transform: uppercase; cursor: pointer; text-align: center;
         }
         .btn-outline { background: transparent; color: #fff; border: 1px solid var(--glass-border); }
-        .btn:hover { opacity: 0.9; }
-        .btn:active { transform: scale(0.95); }
-        #file-input { display: none; }
 
         .reveal { opacity: 1 !important; transform: scale(1) !important; }
         .fade-out { opacity: 0 !important; pointer-events: none; }
@@ -180,35 +195,40 @@
 <body>
 
     <div id="intro">
-        <h1>NEEL<br>NIKHIL</h1>
-        <p>MONOCHROME</p>
-        <div class="inspired-tag">Inspired by Nothing</div>
+        <h1 class="nothing-font">MONOCHROME</h1>
     </div>
 
     <div id="app-wrapper">
         <div class="glass-card">
             <div class="header">
-                <h1>Monochrome</h1>
+                <h1 class="nothing-font">Monochrome</h1>
             </div>
 
             <div class="preview-wrapper">
                 <div class="preview-container">
                     <canvas id="main-canvas" width="1024" height="1024"></canvas>
                 </div>
-                <div id="moon-toggle" title="Switch Mode">
+                <div id="moon-toggle">
                     <div class="moon-shape"></div>
                 </div>
             </div>
 
-            <div class="controls">
+            <div class="density-control">
+                <label>Dot Density</label>
+                <input type="range" id="density-slider" min="40" max="150" value="85">
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px;">
                 <label class="btn">
                     Choose Image
-                    <input type="file" id="file-input" accept="image/*">
+                    <input type="file" id="file-input" style="display:none" accept="image/*">
                 </label>
                 <button class="btn btn-outline" id="download-btn">Export Glyph</button>
             </div>
             
-            <div class="inspired-tag" style="position:relative; bottom:0; right:0; text-align:center; margin-top:10px; opacity: 0.3;">Inspired by Nothing</div>
+            <div class="inspired-footer">
+                Inspired by <span class="nothing-brand nothing-font">Nothing</span>
+            </div>
         </div>
     </div>
 
@@ -217,6 +237,7 @@
         const ctx = canvas.getContext('2d');
         const fileInput = document.getElementById('file-input');
         const moon = document.getElementById('moon-toggle');
+        const densitySlider = document.getElementById('density-slider');
         
         let img = null, isColor = false;
         let scale = 1, offsetX = 0, offsetY = 0;
@@ -250,6 +271,9 @@
             render();
         });
 
+        densitySlider.addEventListener('input', render);
+
+        // Interaction
         canvas.addEventListener('mousedown', e => { isDragging = true; lastX = e.clientX; lastY = e.clientY; });
         window.addEventListener('mouseup', () => isDragging = false);
         window.addEventListener('mousemove', e => {
@@ -264,8 +288,7 @@
         canvas.addEventListener('wheel', e => {
             if (!img) return;
             e.preventDefault();
-            const zoom = e.deltaY * -0.001;
-            scale *= (1 + zoom);
+            scale *= (1 + (e.deltaY * -0.001));
             render();
         }, { passive: false });
 
@@ -274,7 +297,7 @@
             ctx.fillStyle = '#000';
             ctx.fillRect(0, 0, 1024, 1024);
 
-            const res = 85; 
+            const res = parseInt(densitySlider.value); 
             const buffer = document.createElement('canvas');
             buffer.width = res; buffer.height = res;
             const bCtx = buffer.getContext('2d');
@@ -294,7 +317,7 @@
 
                     if (bright > 10) {
                         ctx.beginPath();
-                        ctx.arc(cx, cy, spacing * 0.4, 0, Math.PI * 2);
+                        ctx.arc(cx, cy, spacing * 0.35, 0, Math.PI * 2);
                         ctx.fillStyle = isColor ? `rgb(${data[i]},${data[i+1]},${data[i+2]})` : `rgb(${bright},${bright},${bright})`;
                         ctx.fill();
                     }
@@ -305,7 +328,7 @@
         document.getElementById('download-btn').addEventListener('click', () => {
             if (!img) return;
             const link = document.createElement('a');
-            link.download = 'neel_nikhil_glyph.png';
+            link.download = 'monochrome_glyph.png';
             link.href = canvas.toDataURL();
             link.click();
         });
