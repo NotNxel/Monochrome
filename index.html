@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Monochrome | Glyph PFP</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --glass-bg: rgba(255, 255, 255, 0.08);
@@ -24,7 +24,7 @@
             touch-action: none;
         }
 
-        /* --- Intro Overlay --- */
+        /* --- MASSIVE NOTHING STYLE INTRO --- */
         #intro {
             position: fixed;
             inset: 0;
@@ -34,53 +34,82 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: opacity 0.8s ease;
+            transition: opacity 0.4s ease;
+        }
+
+        #intro h1 {
+            font-size: 120px; /* MUCH BIGGER */
+            font-weight: 900;
+            letter-spacing: -6px;
+            margin: 0;
+            line-height: 0.9;
+            text-align: center;
+            text-transform: uppercase;
+            /* Dot-matrix texture overlay */
+            background-image: radial-gradient(#fff 25%, transparent 25%);
+            background-size: 4px 4px;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 2px #fff);
+        }
+
+        #intro p {
+            font-weight: 100;
+            letter-spacing: 15px; 
+            font-size: 24px;
+            color: #fff;
+            margin-top: 20px;
+            opacity: 0.8;
         }
 
         .inspired-tag {
             position: absolute;
-            bottom: 20px;
-            right: 20px;
-            font-size: 10px;
-            letter-spacing: 2px;
-            color: #444;
+            bottom: 30px;
+            right: 30px;
+            font-size: 12px;
+            letter-spacing: 3px;
+            color: #555;
             text-transform: uppercase;
         }
 
         /* --- Main App Container --- */
         #app-wrapper {
             width: 100%;
-            max-width: 420px;
+            max-width: 450px;
             padding: 20px;
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+            transform: scale(0.9);
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .glass-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
             border: 1px solid var(--glass-border);
-            border-radius: 32px;
-            padding: 30px;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            border-radius: 40px;
+            padding: 40px;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.9);
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 25px;
             position: relative;
         }
 
-        .header { text-align: center; }
-        .header h1 { font-size: 32px; font-weight: 600; letter-spacing: -1px; margin: 0; }
-        .header p { font-size: 12px; font-weight: 100; color: #888; margin-top: 4px; }
+        .header h1 { 
+            font-size: 40px; 
+            font-weight: 900; 
+            letter-spacing: -2px; 
+            margin: 0; 
+            text-align: center; 
+            text-transform: uppercase;
+        }
 
         /* --- Preview & Moon --- */
         .preview-wrapper {
             position: relative;
             width: 100%;
             aspect-ratio: 1/1;
-            cursor: move;
         }
 
         .preview-container {
@@ -88,21 +117,21 @@
             height: 100%;
             background: #000;
             border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
             overflow: hidden;
+            box-shadow: 0 0 30px rgba(0,0,0,1);
         }
 
-        #main-canvas { width: 100%; height: 100%; }
+        #main-canvas { width: 100%; height: 100%; cursor: move; }
 
-        /* Moon Toggle */
         #moon-toggle {
             position: absolute;
-            bottom: -10px;
+            bottom: -20px;
             left: 50%;
             transform: translateX(-50%);
-            width: 50px;
-            height: 50px;
-            background: var(--glass-bg);
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.1);
             backdrop-filter: blur(10px);
             border: 1px solid var(--glass-border);
             border-radius: 50%;
@@ -110,47 +139,49 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: all 0.4s ease;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 10;
         }
+
+        #moon-toggle:hover { background: rgba(255,255,255,0.2); transform: translateX(-50%) scale(1.1); }
 
         .moon-shape {
             width: 24px;
             height: 24px;
             border-radius: 50%;
             background: #fff;
-            transition: all 0.4s ease;
-            box-shadow: inset 8px 0px 0px 0px #000; /* Initial Half Moon */
+            transition: all 0.5s ease;
+            box-shadow: inset 9px 0px 0px 0px #000;
         }
 
         .full-moon .moon-shape {
-            box-shadow: inset 0px 0px 0px 0px #000; /* Full Moon */
-            background: #fff;
-            filter: drop-shadow(0 0 8px #fff);
+            box-shadow: inset 0px 0px 0px 0px #000;
+            filter: drop-shadow(0 0 15px #fff);
         }
 
         /* --- Controls --- */
-        .controls { display: flex; flex-direction: column; gap: 10px; margin-top: 15px;}
-        .instruction { font-size: 10px; color: #666; text-align: center; margin-top: -10px;}
+        .controls { display: flex; flex-direction: column; gap: 12px; }
 
         .btn {
-            background: #fff; color: #000; border: none; padding: 16px;
-            border-radius: 14px; font-weight: 600; font-size: 14px;
-            cursor: pointer; transition: 0.2s; text-align: center;
+            background: #fff; color: #000; border: none; padding: 20px;
+            border-radius: 20px; font-weight: 900; font-size: 16px;
+            text-transform: uppercase; cursor: pointer; transition: 0.2s; 
+            text-align: center; letter-spacing: 1px;
         }
         .btn-outline { background: transparent; color: #fff; border: 1px solid var(--glass-border); }
-        .btn:active { transform: scale(0.96); }
+        .btn:hover { opacity: 0.9; }
+        .btn:active { transform: scale(0.95); }
         #file-input { display: none; }
 
-        .reveal { opacity: 1 !important; transform: translateY(0) !important; }
+        .reveal { opacity: 1 !important; transform: scale(1) !important; }
         .fade-out { opacity: 0 !important; pointer-events: none; }
     </style>
 </head>
 <body>
 
     <div id="intro">
-        <h1 style="font-weight:600; letter-spacing: -1px; margin-bottom: 5px;">NEEL NIKHIL</h1>
-        <p style="font-weight:100; letter-spacing: 4px; font-size: 12px; color: #888;">MONOCHROME</p>
+        <h1>NEEL<br>NIKHIL</h1>
+        <p>MONOCHROME</p>
         <div class="inspired-tag">Inspired by Nothing</div>
     </div>
 
@@ -164,22 +195,20 @@
                 <div class="preview-container">
                     <canvas id="main-canvas" width="1024" height="1024"></canvas>
                 </div>
-                <div id="moon-toggle">
+                <div id="moon-toggle" title="Switch Mode">
                     <div class="moon-shape"></div>
                 </div>
             </div>
-
-            <p class="instruction">Drag to reposition • Pinch/Scroll to zoom</p>
 
             <div class="controls">
                 <label class="btn">
                     Choose Image
                     <input type="file" id="file-input" accept="image/*">
                 </label>
-                <button class="btn btn-outline" id="download-btn">Download PFP</button>
+                <button class="btn btn-outline" id="download-btn">Export Glyph</button>
             </div>
             
-            <div class="inspired-tag" style="position:relative; bottom:0; right:0; text-align:center; margin-top:10px;">Inspired by Nothing</div>
+            <div class="inspired-tag" style="position:relative; bottom:0; right:0; text-align:center; margin-top:10px; opacity: 0.3;">Inspired by Nothing</div>
         </div>
     </div>
 
@@ -189,19 +218,15 @@
         const fileInput = document.getElementById('file-input');
         const moon = document.getElementById('moon-toggle');
         
-        let img = null;
-        let isColor = false;
-        let scale = 1;
-        let offsetX = 0;
-        let offsetY = 0;
-        let isDragging = false;
-        let lastX, lastY;
+        let img = null, isColor = false;
+        let scale = 1, offsetX = 0, offsetY = 0;
+        let isDragging = false, lastX, lastY;
 
         window.onload = () => {
             setTimeout(() => {
                 document.getElementById('intro').classList.add('fade-out');
                 document.getElementById('app-wrapper').classList.add('reveal');
-            }, 3000);
+            }, 1800);
         };
 
         fileInput.addEventListener('change', (e) => {
@@ -225,58 +250,52 @@
             render();
         });
 
-        // --- Interaction Logic (Zoom/Drag) ---
         canvas.addEventListener('mousedown', e => { isDragging = true; lastX = e.clientX; lastY = e.clientY; });
         window.addEventListener('mouseup', () => isDragging = false);
         window.addEventListener('mousemove', e => {
             if (!isDragging || !img) return;
-            offsetX += (e.clientX - lastX) * (1024/canvas.clientWidth);
-            offsetY += (e.clientY - lastY) * (1024/canvas.clientWidth);
+            const factor = 1024 / canvas.clientWidth;
+            offsetX += (e.clientX - lastX) * factor;
+            offsetY += (e.clientY - lastY) * factor;
             lastX = e.clientX; lastY = e.clientY;
             render();
         });
 
         canvas.addEventListener('wheel', e => {
+            if (!img) return;
             e.preventDefault();
-            const delta = e.deltaY > 0 ? 0.9 : 1.1;
-            scale *= delta;
+            const zoom = e.deltaY * -0.001;
+            scale *= (1 + zoom);
             render();
         }, { passive: false });
 
         function render() {
             if (!img) return;
-            
-            // Clear
             ctx.fillStyle = '#000';
             ctx.fillRect(0, 0, 1024, 1024);
 
+            const res = 85; 
             const buffer = document.createElement('canvas');
-            buffer.width = 80; // Dot resolution
-            buffer.height = 80;
+            buffer.width = res; buffer.height = res;
             const bCtx = buffer.getContext('2d');
 
-            // Draw transformed image to low-res buffer
-            bCtx.drawImage(img, offsetX/(1024/80), offsetY/(1024/80), (img.width*scale)/(1024/80), (img.height*scale)/(1024/80));
-            const data = bCtx.getImageData(0, 0, 80, 80).data;
+            bCtx.drawImage(img, offsetX/(1024/res), offsetY/(1024/res), (img.width*scale)/(1024/res), (img.height*scale)/(1024/res));
+            const data = bCtx.getImageData(0, 0, res, res).data;
 
-            const spacing = 1024 / 80;
-            for (let y = 0; y < 80; y++) {
-                for (let x = 0; x < 80; x++) {
+            const spacing = 1024 / res;
+            for (let y = 0; y < res; y++) {
+                for (let x = 0; x < res; x++) {
                     const cx = x * spacing + spacing/2;
                     const cy = y * spacing + spacing/2;
-                    
-                    // Circular Crop Mask
-                    const dist = Math.sqrt((cx-512)**2 + (cy-512)**2);
-                    if (dist > 510) continue;
+                    if (Math.sqrt((cx-512)**2 + (cy-512)**2) > 510) continue;
 
-                    const i = (y * 80 + x) * 4;
-                    const r = data[i], g = data[i+1], b = data[i+2];
-                    const brightness = (r + g + b) / 3;
+                    const i = (y * res + x) * 4;
+                    const bright = (data[i] + data[i+1] + data[i+2]) / 3;
 
-                    if (brightness > 20) {
+                    if (bright > 10) {
                         ctx.beginPath();
                         ctx.arc(cx, cy, spacing * 0.4, 0, Math.PI * 2);
-                        ctx.fillStyle = isColor ? `rgb(${r},${g},${b})` : `rgb(${brightness},${brightness},${brightness})`;
+                        ctx.fillStyle = isColor ? `rgb(${data[i]},${data[i+1]},${data[i+2]})` : `rgb(${bright},${bright},${bright})`;
                         ctx.fill();
                     }
                 }
@@ -284,8 +303,9 @@
         }
 
         document.getElementById('download-btn').addEventListener('click', () => {
+            if (!img) return;
             const link = document.createElement('a');
-            link.download = 'glyph.png';
+            link.download = 'neel_nikhil_glyph.png';
             link.href = canvas.toDataURL();
             link.click();
         });
