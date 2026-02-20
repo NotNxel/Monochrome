@@ -8,7 +8,8 @@
     <style>
         :root {
             --glass-bg: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --nothing-white: #ffffff;
         }
 
         body {
@@ -24,14 +25,15 @@
             touch-action: none;
         }
 
-        /* --- Nothing Dot Font Effect --- */
+        /* --- Bolder Nothing Dot Font --- */
         .nothing-font {
             text-transform: uppercase;
-            background-image: radial-gradient(#fff 35%, transparent 35%);
-            background-size: 4px 4px;
+            background-image: radial-gradient(circle, var(--nothing-white) 42%, transparent 45%);
+            background-size: 5px 5px; /* Larger dots for better visibility */
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 1px rgba(255,255,255,0.5));
+            filter: drop-shadow(0 0 1px rgba(255,255,255,0.8));
+            display: inline-block;
         }
 
         /* --- Intro --- */
@@ -45,13 +47,23 @@
             justify-content: center;
             align-items: center;
             transition: opacity 0.5s ease;
+            text-align: center;
         }
 
         #intro h1 {
-            font-size: 80px;
+            font-size: clamp(60px, 15vw, 100px);
             font-weight: 900;
             letter-spacing: -4px;
             margin: 0;
+            line-height: 1;
+        }
+
+        #intro p {
+            font-size: 20px;
+            font-weight: 100;
+            letter-spacing: 5px;
+            margin-top: 15px;
+            color: #fff;
         }
 
         /* --- Main App --- */
@@ -60,7 +72,7 @@
             max-width: 450px;
             padding: 20px;
             opacity: 0;
-            transform: scale(0.9);
+            transform: scale(0.95);
             transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
@@ -69,7 +81,7 @@
             backdrop-filter: blur(40px);
             -webkit-backdrop-filter: blur(40px);
             border: 1px solid var(--glass-border);
-            border-radius: 40px;
+            border-radius: 44px;
             padding: 35px;
             box-shadow: 0 50px 100px rgba(0,0,0,0.9);
             display: flex;
@@ -79,42 +91,44 @@
         }
 
         .header h1 { 
-            font-size: 42px; 
+            font-size: 48px; 
             font-weight: 900; 
             letter-spacing: -2px; 
             margin: 0; 
             text-align: center; 
         }
 
-        /* --- Slider Styling --- */
+        /* --- Density Slider --- */
         .density-control {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
         }
         
         .density-control label {
-            font-size: 10px;
+            font-size: 11px;
             letter-spacing: 2px;
-            color: #888;
+            color: #ccc;
             text-transform: uppercase;
+            font-weight: 600;
         }
 
         input[type=range] {
             -webkit-appearance: none;
             width: 100%;
-            background: rgba(255,255,255,0.1);
-            height: 4px;
-            border-radius: 2px;
+            background: rgba(255,255,255,0.15);
+            height: 6px;
+            border-radius: 10px;
         }
 
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            height: 18px;
-            width: 18px;
+            height: 20px;
+            width: 20px;
             border-radius: 50%;
             background: #fff;
             cursor: pointer;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
         }
 
         /* --- Preview Area --- */
@@ -129,7 +143,7 @@
             height: 100%;
             background: #000;
             border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.15);
+            border: 2px solid rgba(255,255,255,0.2);
             overflow: hidden;
         }
 
@@ -140,11 +154,11 @@
             bottom: -15px;
             left: 50%;
             transform: translateX(-50%);
-            width: 54px;
-            height: 54px;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
+            width: 58px;
+            height: 58px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.3);
             border-radius: 50%;
             cursor: pointer;
             display: flex;
@@ -154,39 +168,40 @@
         }
 
         .moon-shape {
-            width: 22px;
-            height: 22px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             background: #fff;
-            transition: 0.4s;
-            box-shadow: inset 8px 0px 0px 0px #000;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: inset 9px 0px 0px 0px #000;
         }
 
         .full-moon .moon-shape {
             box-shadow: inset 0px 0px 0px 0px #000;
-            filter: drop-shadow(0 0 10px #fff);
+            filter: drop-shadow(0 0 12px #fff);
         }
 
-        /* --- Footer Branding --- */
+        /* --- Footer --- */
         .inspired-footer {
             text-align: center;
-            font-size: 12px;
-            color: #555;
+            font-size: 13px;
+            color: #aaa;
             margin-top: 10px;
         }
         
         .nothing-brand {
-            color: #fff;
-            font-weight: 900;
-            font-size: 14px;
+            font-size: 16px;
+            margin-left: 4px;
         }
 
         .btn {
             background: #fff; color: #000; border: none; padding: 18px;
-            border-radius: 18px; font-weight: 900; font-size: 14px;
+            border-radius: 20px; font-weight: 900; font-size: 15px;
             text-transform: uppercase; cursor: pointer; text-align: center;
+            transition: transform 0.2s;
         }
         .btn-outline { background: transparent; color: #fff; border: 1px solid var(--glass-border); }
+        .btn:active { transform: scale(0.96); }
 
         .reveal { opacity: 1 !important; transform: scale(1) !important; }
         .fade-out { opacity: 0 !important; pointer-events: none; }
@@ -196,6 +211,7 @@
 
     <div id="intro">
         <h1 class="nothing-font">MONOCHROME</h1>
+        <p class="nothing-font" style="font-size: 18px;">- Neel Nikhil -</p>
     </div>
 
     <div id="app-wrapper">
@@ -215,10 +231,10 @@
 
             <div class="density-control">
                 <label>Dot Density</label>
-                <input type="range" id="density-slider" min="40" max="150" value="85">
+                <input type="range" id="density-slider" min="40" max="160" value="90">
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; flex-direction: column; gap: 12px;">
                 <label class="btn">
                     Choose Image
                     <input type="file" id="file-input" style="display:none" accept="image/*">
@@ -273,7 +289,6 @@
 
         densitySlider.addEventListener('input', render);
 
-        // Interaction
         canvas.addEventListener('mousedown', e => { isDragging = true; lastX = e.clientX; lastY = e.clientY; });
         window.addEventListener('mouseup', () => isDragging = false);
         window.addEventListener('mousemove', e => {
@@ -313,12 +328,13 @@
                     if (Math.sqrt((cx-512)**2 + (cy-512)**2) > 510) continue;
 
                     const i = (y * res + x) * 4;
-                    const bright = (data[i] + data[i+1] + data[i+2]) / 3;
+                    const r = data[i], g = data[i+1], b = data[i+2];
+                    const bright = (r + g + b) / 3;
 
-                    if (bright > 10) {
+                    if (bright > 12) {
                         ctx.beginPath();
-                        ctx.arc(cx, cy, spacing * 0.35, 0, Math.PI * 2);
-                        ctx.fillStyle = isColor ? `rgb(${data[i]},${data[i+1]},${data[i+2]})` : `rgb(${bright},${bright},${bright})`;
+                        ctx.arc(cx, cy, spacing * 0.38, 0, Math.PI * 2);
+                        ctx.fillStyle = isColor ? `rgb(${r},${g},${b})` : `rgb(${bright},${bright},${bright})`;
                         ctx.fill();
                     }
                 }
