@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Monochrome | Glyph Profile Photo Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --accent: #fff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            background: radial-gradient(circle at center, #111 0%, #000 100%);
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- Intro Animation --- */
+        #intro {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #intro-canvas { width: 100%; max-width: 800px; filter: drop-shadow(0 0 8px #fff); }
+
+        .credit-tag {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            font-size: 12px;
+            font-weight: 300;
+            color: #666;
+            letter-spacing: 1px;
+        }
+
+        /* --- Main App UI --- */
+        #app-wrapper {
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            text-align: center;
+        }
+
+        #header-canvas { height: 60px; width: 100%; margin-bottom: 10px; }
+
+        /* --- Controls --- */
+        .btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            padding: 16px;
+            border-radius: 14px;
+            cursor: pointer;
+            font-family: 'Inter';
+            font-weight: 300;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover { background: rgba(255,255,255,0.15); box-shadow: 0 0 15px rgba(255,255,255,0.1); }
+        .btn:active { transform: scale(0.98); }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+            font-size: 14px;
+            font-weight: 300;
+            color: #aaa;
+        }
+
+        .switch {
+            width: 44px; height: 24px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            position: relative;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .switch::after {
+            content: '';
+            position: absolute;
+            top: 4px; left: 4px;
+            width: 16px; height: 16px;
+            background: #fff;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        #color-toggle:checked + .switch { background: #444; }
+        #color-toggle:checked + .switch::after { transform: translateX(20px); }
+        #color-toggle { display: none; }
+
+        /* --- Preview Area --- */
+        .preview-box {
+            width: 100%;
+            aspect-ratio: 1/1;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        #main-canvas {
+            width: 100%;
+            height: 100%;
+            image-rendering: pixelated;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .hidden-input { display: none; }
+        
+        /* Utility */
+        .reveal { opacity: 1 !important; transform: translateY(0) !important; }
+        .fade-out { opacity: 0 !important; pointer-events: none; }
+    </style>
+</head>
+<body>
+
+    <div id="intro">
+        <canvas id="intro-canvas" width="1000" height="300"></canvas>
+        <div class="credit-tag">INSPIRED BY NOTHING</div>
+    </div>
+
+    <div id="app-wrapper">
+        <div class="glass-card">
+            <canvas id="header-canvas"></canvas>
+
+            <label class="btn">
+                Choose PFP Image
+                <input type="file" class="hidden-input" id="file-upload" accept="image/*">
+            </label>
+
+            <div class="toggle-container">
+                <span>KEEP COLORS</span>
+                <label>
+                    <input type="checkbox" id="color-toggle">
+                    <div class="switch"></div>
+                </label>
+            </div>
+
+            <div class="preview-box">
+                <canvas id="main-canvas" width="330" height="330"></canvas>
+            </div>
+
+            <button class="btn" id="download-btn" style="font-weight: 700;">DOWNLOAD PFP</button>
+        </div>
+    </div>
+
+    <script>
+        const DOT_FONT = {
+            'A': [14, 17, 17, 31, 17, 17, 17], 'B': [30, 17, 17, 30, 17, 17, 30],
+            'C': [14, 17, 16, 16, 16, 17, 14], 'D': [28, 18, 17, 17, 17, 18, 28],
+            'E': [31, 16, 16, 30, 16, 16, 31], 'F': [31, 16, 16, 30, 16, 16, 16],
+            'G': [14, 17, 16, 23, 17, 17, 14], 'H': [17, 17, 17, 31, 17, 17, 17],
+            'I': [14, 4, 4, 4, 4, 4, 14], 'J': [7, 2, 2, 2, 2, 18, 12],
+            'K': [17, 18, 20, 24, 20, 18, 17], 'L': [16, 16, 16, 16, 16, 16, 31],
+            'M': [17, 27, 21, 21, 17, 17, 17], 'N': [17, 25, 21, 19, 17, 17, 17],
+            'O': [14, 17, 17, 17, 17, 17, 14], 'P': [30, 17, 17, 30, 16, 16, 16],
+            'Q': [14, 17, 17, 17, 21, 18, 13], 'R': [30, 17, 17, 30, 20, 18, 17],
+            'S': [15, 16, 16, 14, 1, 1, 30], 'T': [31, 4, 4, 4, 4, 4, 4],
+            'U': [17, 17, 17, 17, 17, 17, 14], 'V': [17, 17, 17, 17, 17, 10, 4],
+            'W': [17, 17, 17, 21, 21, 27, 17], 'X': [17, 17, 10, 4, 10, 17, 17],
+            'Y': [17, 17, 10, 4, 4, 4, 4], 'Z': [31, 1, 2, 4, 8, 16, 31],
+            ' ': [0, 0, 0, 0, 0, 0, 0], '.': [0,0,0,0,0,0,4], '0':[14,17,19,21,25,17,14]
+        };
+
+        function drawText(ctx, text, x, y, size, stagger = false) {
+            let cursor = x;
+            text.toUpperCase().split('').forEach((char, charIdx) => {
+                const glyph = DOT_FONT[char] || DOT_FONT[' '];
+                glyph.forEach((row, rowIndex) => {
+                    for (let bit = 0; bit < 5; bit++) {
+                        if ((row >> (4 - bit)) & 1) {
+                            const px = cursor + (bit * size);
+                            const py = y + (rowIndex * size);
+                            if (stagger) {
+                                setTimeout(() => {
+                                    ctx.fillStyle = '#fff';
+                                    ctx.fillRect(px, py, size - 1, size - 1);
+                                }, (charIdx * 100) + (rowIndex * 20));
+                            } else {
+                                ctx.fillStyle = '#fff';
+                                ctx.fillRect(px, py, size - 1, size - 1);
+                            }
+                        }
+                    }
+                });
+                cursor += 6 * size;
+            });
+        }
+
+        // --- Initialization ---
+        const intro = document.getElementById('intro');
+        const introCtx = document.getElementById('intro-canvas').getContext('2d');
+        const headerCtx = document.getElementById('header-canvas').getContext('2d');
+        const mainCanvas = document.getElementById('main-canvas');
+        const mainCtx = mainCanvas.getContext('2d', { willReadFrequently: true });
+        const appWrapper = document.getElementById('app-wrapper');
+        let sourceImg = null;
+
+        window.onload = () => {
+            // Run Intro
+            drawText(introCtx, "MONOCHROME BY NEEL NIKHIL", 50, 120, 12, true);
+            
+            setTimeout(() => {
+                intro.classList.add('fade-out');
+                appWrapper.classList.add('reveal');
+                // Draw Header
+                drawText(headerCtx, "MONOCHROME", 25, 10, 5);
+                drawText(headerCtx, "BY NEEL NIKHIL", 70, 45, 2);
+            }, 3500);
+        };
+
+        // --- Processing Logic ---
+        function processImage() {
+            if (!sourceImg) return;
+
+            const isColor = document.getElementById('color-toggle').checked;
+            mainCtx.fillStyle = '#000';
+            mainCtx.fillRect(0, 0, 330, 330);
+            
+            // Temporary canvas for resizing
+            const tCanvas = document.createElement('canvas');
+            const tCtx = tCanvas.getContext('2d');
+            tCanvas.width = 110; // Resulting resolution (3x scale down)
+            tCanvas.height = 110;
+            tCtx.drawImage(sourceImg, 0, 0, 110, 110);
+            
+            const imgData = tCtx.getImageData(0, 0, 110, 110);
+            const data = imgData.data;
+
+            for (let y = 0; y < 110; y++) {
+                for (let x = 0; x < 110; x++) {
+                    const idx = (y * 110 + x) * 4;
+                    const r = data[idx], g = data[idx+1], b = data[idx+2];
+                    const avg = (r + g + b) / 3;
+                    
+                    if (avg > 127) {
+                        mainCtx.fillStyle = isColor ? `rgb(${r},${g},${b})` : '#fff';
+                        mainCtx.shadowBlur = 4;
+                        mainCtx.shadowColor = mainCtx.fillStyle;
+                        mainCtx.fillRect(x * 3, y * 3, 2, 2);
+                    }
+                }
+            }
+            
+            mainCanvas.style.transform = 'scale(1.05)';
+            setTimeout(() => mainCanvas.style.transform = 'scale(1)', 200);
+        }
+
+        // --- Event Listeners ---
+        document.getElementById('file-upload').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                sourceImg = new Image();
+                sourceImg.onload = processImage;
+                sourceImg.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('color-toggle').addEventListener('change', processImage);
+
+        document.getElementById('download-btn').addEventListener('click', () => {
+            // Scale up for export
+            const exportCanvas = document.createElement('canvas');
+            exportCanvas.width = 1024;
+            exportCanvas.height = 1024;
+            const exCtx = exportCanvas.getContext('2d');
+            exCtx.fillStyle = '#000';
+            exCtx.fillRect(0,0,1024,1024);
+            exCtx.imageSmoothingEnabled = false;
+            exCtx.drawImage(mainCanvas, 0, 0, 1024, 1024);
+            
+            const link = document.createElement('a');
+            link.download = 'glyph_pfp.png';
+            link.href = exportCanvas.toDataURL();
+            link.click();
+        });
+    </script>
+</body>
+</html>
