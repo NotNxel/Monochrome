@@ -8,7 +8,7 @@
     <style>
         :root {
             --glass-bg: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-border: rgba(255, 255, 255, 0.25);
             --nothing-white: #ffffff;
         }
 
@@ -25,15 +25,29 @@
             touch-action: none;
         }
 
-        /* --- Bolder Nothing Dot Font --- */
+        /* --- HIGH VISIBILITY NOTHING DOT FONT --- */
         .nothing-font {
             text-transform: uppercase;
-            background-image: radial-gradient(circle, var(--nothing-white) 42%, transparent 45%);
-            background-size: 5px 5px; /* Larger dots for better visibility */
+            font-weight: 900;
+            color: white;
+            /* Creates the dot texture via a repeating linear gradient */
+            background: radial-gradient(circle, #fff 40%, transparent 45%);
+            background-size: 4px 4px;
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 1px rgba(255,255,255,0.8));
-            display: inline-block;
+            /* White glow to ensure it pops off the black */
+            filter: drop-shadow(0 0 1px rgba(255,255,255,0.9));
+        }
+
+        /* Special class for the smaller footer to ensure it's white and dotty */
+        .brand-bright {
+            background: radial-gradient(circle, #fff 45%, transparent 50%);
+            background-size: 3px 3px;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
         }
 
         /* --- Intro --- */
@@ -52,18 +66,18 @@
 
         #intro h1 {
             font-size: clamp(60px, 15vw, 100px);
-            font-weight: 900;
-            letter-spacing: -4px;
             margin: 0;
             line-height: 1;
         }
 
         #intro p {
-            font-size: 20px;
-            font-weight: 100;
-            letter-spacing: 5px;
-            margin-top: 15px;
-            color: #fff;
+            font-size: 22px;
+            margin-top: 20px;
+            letter-spacing: 2px;
+            /* Forcing visibility on the credit line */
+            -webkit-text-fill-color: white !important; 
+            background: none !important;
+            font-weight: 300;
         }
 
         /* --- Main App --- */
@@ -92,8 +106,6 @@
 
         .header h1 { 
             font-size: 48px; 
-            font-weight: 900; 
-            letter-spacing: -2px; 
             margin: 0; 
             text-align: center; 
         }
@@ -108,7 +120,7 @@
         .density-control label {
             font-size: 11px;
             letter-spacing: 2px;
-            color: #ccc;
+            color: #fff; /* High contrast */
             text-transform: uppercase;
             font-weight: 600;
         }
@@ -116,19 +128,18 @@
         input[type=range] {
             -webkit-appearance: none;
             width: 100%;
-            background: rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.3);
             height: 6px;
             border-radius: 10px;
         }
 
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            height: 20px;
-            width: 20px;
+            height: 22px;
+            width: 22px;
             border-radius: 50%;
             background: #fff;
             cursor: pointer;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
         }
 
         /* --- Preview Area --- */
@@ -143,7 +154,7 @@
             height: 100%;
             background: #000;
             border-radius: 50%;
-            border: 2px solid rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
             overflow: hidden;
         }
 
@@ -156,9 +167,9 @@
             transform: translateX(-50%);
             width: 58px;
             height: 58px;
-            background: rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.2);
             backdrop-filter: blur(15px);
-            border: 1px solid rgba(255,255,255,0.3);
+            border: 1px solid rgba(255,255,255,0.4);
             border-radius: 50%;
             cursor: pointer;
             display: flex;
@@ -172,7 +183,7 @@
             height: 24px;
             border-radius: 50%;
             background: #fff;
-            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: 0.4s;
             box-shadow: inset 9px 0px 0px 0px #000;
         }
 
@@ -184,24 +195,22 @@
         /* --- Footer --- */
         .inspired-footer {
             text-align: center;
-            font-size: 13px;
-            color: #aaa;
+            font-size: 14px;
+            color: #fff; /* Pure white for visibility */
             margin-top: 10px;
         }
         
         .nothing-brand {
-            font-size: 16px;
-            margin-left: 4px;
+            font-size: 18px;
+            margin-left: 5px;
         }
 
         .btn {
             background: #fff; color: #000; border: none; padding: 18px;
             border-radius: 20px; font-weight: 900; font-size: 15px;
             text-transform: uppercase; cursor: pointer; text-align: center;
-            transition: transform 0.2s;
         }
-        .btn-outline { background: transparent; color: #fff; border: 1px solid var(--glass-border); }
-        .btn:active { transform: scale(0.96); }
+        .btn-outline { background: transparent; color: #fff; border: 2px solid #fff; }
 
         .reveal { opacity: 1 !important; transform: scale(1) !important; }
         .fade-out { opacity: 0 !important; pointer-events: none; }
@@ -211,7 +220,7 @@
 
     <div id="intro">
         <h1 class="nothing-font">MONOCHROME</h1>
-        <p class="nothing-font" style="font-size: 18px;">- Neel Nikhil -</p>
+        <p>- Neel Nikhil -</p>
     </div>
 
     <div id="app-wrapper">
@@ -231,7 +240,7 @@
 
             <div class="density-control">
                 <label>Dot Density</label>
-                <input type="range" id="density-slider" min="40" max="160" value="90">
+                <input type="range" id="density-slider" min="40" max="180" value="95">
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 12px;">
@@ -243,7 +252,7 @@
             </div>
             
             <div class="inspired-footer">
-                Inspired by <span class="nothing-brand nothing-font">Nothing</span>
+                Inspired by <span class="brand-bright">Nothing</span>
             </div>
         </div>
     </div>
@@ -333,7 +342,7 @@
 
                     if (bright > 12) {
                         ctx.beginPath();
-                        ctx.arc(cx, cy, spacing * 0.38, 0, Math.PI * 2);
+                        ctx.arc(cx, cy, spacing * 0.4, 0, Math.PI * 2);
                         ctx.fillStyle = isColor ? `rgb(${r},${g},${b})` : `rgb(${bright},${bright},${bright})`;
                         ctx.fill();
                     }
